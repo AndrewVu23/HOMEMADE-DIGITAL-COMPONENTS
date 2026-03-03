@@ -1,0 +1,10 @@
+# Cocotb/Sim artifacts
+sim_build/
+__pycache__/
+results.xml
+*.vvp
+*.vcd
+
+# IDE and OS files
+.vscode/
+**/.DS_Store
