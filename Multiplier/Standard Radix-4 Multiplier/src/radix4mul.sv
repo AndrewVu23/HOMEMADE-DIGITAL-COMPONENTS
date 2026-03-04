@@ -11,23 +11,25 @@ module radix4mul #(parameter N = 32, parameter COUNT = 15)
     logic Q_ref; // LSB of Q
     logic [$clog2(N):0] count; 
 
-    // A_next is N+1 bits since we have to account for overflowing when doing
-    // addition between A and M, with M = MIN(int) (edge case)
-    logic signed [N:0] A_next; 
-    
+    // A_next is N+2 bits (34 bits) to handle +/- 2M without overflow.
+    logic signed [N+1:0] A_next;
     assign P = {A_reg, Q_reg};
 
+    // If the second-last number of the register is 1, when we shift right by 1 bit, the number would become negative.
+    // Therefore, we need a 34-bit register to match the accummulator and handle the shifting case.
+    logic signed [N+1:0] M_ext;
+    assign M_ext = $signed(M_reg);
+
     always_comb begin
+        // Perform math in 34-bit signed space to prevent overflow of +/- 2M
         case({Q_reg[1], Q_reg[0], Q_ref})
-            3'b000: A_next = $signed({A_reg[N-1], A_reg}); // Sign extend A_reg
-            3'b001: A_next = $signed(A_reg) + $signed(M_reg); // Exit string of 1s -> Add
-            3'b010: A_next = $signed(A_reg) + $signed(M_reg); // Only one 1 -> Add
-            3'b011: A_next = $signed(A_reg) + $signed(M_reg << 1); // Exit string of 1s -> 2Add
-            3'b100: A_next = $signed(A_reg) - $signed(M_reg << 1); // Enter string of 1s -> 2Sub
-            3'b101: A_next = $signed(A_reg) - $signed(M_reg); // Exit and Enter string of 1s -> 2Sub + Add = Sub
-            3'b110: A_next = $signed(A_reg) - $signed(M_reg); //Enter string of 1s -> Sub
-            3'b111: A_next = $signed({A_reg[N-1], A_reg}); // Sign extend A_reg
-            default: A_next = $signed({A_reg[N-1], A_reg}); // Sign extend A_reg
+            3'b001:  A_next = $signed(A_reg) + M_ext;
+            3'b010:  A_next = $signed(A_reg) + M_ext;
+            3'b011:  A_next = $signed(A_reg) + (M_ext <<< 1);
+            3'b100:  A_next = $signed(A_reg) - (M_ext <<< 1);
+            3'b101:  A_next = $signed(A_reg) - M_ext;
+            3'b110:  A_next = $signed(A_reg) - M_ext;
+            default: A_next = $signed(A_reg);
         endcase
     end
 
@@ -54,11 +56,10 @@ module radix4mul #(parameter N = 32, parameter COUNT = 15)
                 end
 
                 CALC: begin
-                    
-                    // Arithmetic Shift Right of {A_next, Q_reg}
-                    A_reg <= {A_next[N], A_next[N-1:2];
-                    Q_reg <= {A_next[1], A_next[0], Q_reg[N-1:2]};
+                    // 2-bit Arithmetic Shift Right
                     Q_ref <= Q_reg[1];
+                    A_reg <= A_next[N+1:2];
+                    Q_reg <= {A_next[1:0], Q_reg[N-1:2]};
                 
                     count <= count + 1;
                     if (count == COUNT) state <= STOP; // Stop after evaluating all 32 bits
