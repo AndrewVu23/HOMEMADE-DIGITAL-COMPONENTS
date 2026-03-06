@@ -36,3 +36,7 @@ In hardware multipliers handling signed (two's complement) numbers, intermediate
   * The Radix-4 algorithm needs to perform operations up to $\pm 2 \times \text{Multiplicand}$.
   * The worst-case mathematical edge case is $0 - (2 \times -2^{31}) = +2^{32}$.
   * A 33-bit width can only represent up to $+2^{31}-1$. Thus, we need another extra bit of headspace. We design these combinational paths to be **34 bits** wide (bit 33 holds the value, bit 34 stores the correct sign bit) to gracefully capture this boundary case.
+ 
+    
+![IMG_7337BA530CB6-1](https://github.com/user-attachments/assets/eeff0b9b-663b-4158-9685-d4522d5f3070)
+
