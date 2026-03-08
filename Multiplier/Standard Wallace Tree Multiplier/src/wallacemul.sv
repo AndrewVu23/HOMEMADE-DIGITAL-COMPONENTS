@@ -42,8 +42,9 @@ assign row6_padded = {2'b0, pp[6], 6'b0};
 assign row7_padded = {1'b0, pp[7], 7'b0};
 
 logic [15:0] sum1, sum2, sum3, sum4, sum5;
-logic [15:0] carry1, carry2, carry3, carry4, carry5;
-logic [15:0] final_sum, final_carry;
+logic [16:0] carry1, carry2, carry3, carry4, carry5;
+logic [15:0] final_sum;
+logic [16:0] final_carry;
 
 assign carry1[0] = 1'b0;
 assign carry2[0] = 1'b0;
@@ -55,7 +56,7 @@ assign final_carry[0] = 1'b0;
 genvar k;
 
 generate
-    for (k = 0; k < 15; k++) begin : column_loop_stage1_zone1
+    for (k = 0; k < 16; k++) begin : column_loop_stage1_zone1
         fa fa1(
             .a(row0_padded[k]),
             .b(row1_padded[k]),
@@ -65,7 +66,7 @@ generate
         );
     end
     
-    for (k = 0; k < 15; k++) begin : column_loop_stage1_zone2
+    for (k = 0; k < 16; k++) begin : column_loop_stage1_zone2
         fa fa2(
             .a(row3_padded[k]),
             .b(row4_padded[k]),
@@ -75,7 +76,7 @@ generate
         );
     end
 
-    for (k = 0; k < 15; k++) begin : column_loop_stage2_zone1
+    for (k = 0; k < 16; k++) begin : column_loop_stage2_zone1
         fa fa3(
             .a(sum1[k]),
             .b(carry1[k]),
@@ -85,7 +86,7 @@ generate
         );
     end
 
-    for (k = 0; k < 15; k++) begin : column_loop_stage2_zone2
+    for (k = 0; k < 16; k++) begin : column_loop_stage2_zone2
         fa fa4(
             .a(carry2[k]),
             .b(row6_padded[k]),
@@ -95,7 +96,7 @@ generate
         );
     end
 
-    for (k = 0; k < 15; k++) begin : column_loop_stage3_zone1
+    for (k = 0; k < 16; k++) begin : column_loop_stage3_zone1
         fa fa5(
             .a(sum3[k]),
             .b(carry3[k]),
@@ -105,7 +106,7 @@ generate
         );
     end
 
-    for (k = 0; k < 15; k++) begin : column_loop_final
+    for (k = 0; k < 16; k++) begin : column_loop_final
         fa fa6(
             .a(sum5[k]),
             .b(carry5[k]),
@@ -116,6 +117,6 @@ generate
     end
 endgenerate
 
-assign p = final_sum + final_carry;
+assign p = final_sum + final_carry[15:0];
 
 endmodule
