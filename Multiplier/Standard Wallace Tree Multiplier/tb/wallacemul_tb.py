@@ -41,7 +41,7 @@ async def wallacemul_tb(dut):
     dut._log.info("Testing Edge Cases (Min/Max values)...")
     MAX_INT = 255
     MIN_INT = 0
-    
+
     await perform_multiplication(dut, MAX_INT, 2)
     await perform_multiplication(dut, 2, MAX_INT)
     await perform_multiplication(dut, MAX_INT, MAX_INT)
