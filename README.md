@@ -40,3 +40,9 @@ In hardware multipliers handling signed (two's complement) numbers, intermediate
     
 ![IMG_7337BA530CB6-1](https://github.com/user-attachments/assets/eeff0b9b-663b-4158-9685-d4522d5f3070)
 
+## Cache
+
+### 4-Banked Direct Mapped Cache
+
+![IMG_3B0EB9E38FE2-1](https://github.com/user-attachments/assets/dfc01388-67a8-4597-b2f9-6bc844944d3f)
+
