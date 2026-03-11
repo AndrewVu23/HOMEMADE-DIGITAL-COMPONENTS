@@ -1,8 +1,8 @@
-module four_bank_sram #(parameter SRAM_DATA = 32)
+module four_bank_sram #(parameter SRAM_DATA = 32, parameter MASK = 4)
 (
     input logic clk, we,
     input logic [3:0] index,
-    input logic [3:0] wmask,
+    input logic [MASK-1:0] wmask,
     input logic [SRAM_DATA-1:0] wdata,
     output logic [SRAM_DATA-1:0] rdata
 );
