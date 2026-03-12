@@ -2,6 +2,7 @@ module read_mux #(parameter SRAM_DATA = 32)
 (
     input logic [1:0] sel,
     input logic [SRAM_DATA-1:0] bank_0, bank_1, bank_2, bank_3,
+    
     output logic [SRAM_DATA-1:0] rdata
 );
     always_comb begin

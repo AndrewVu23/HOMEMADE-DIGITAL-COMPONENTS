@@ -4,6 +4,7 @@ module four_bank_sram #(parameter SRAM_DATA = 32, parameter MASK = 4)
     input logic [3:0] index,
     input logic [MASK-1:0] wmask,
     input logic [SRAM_DATA-1:0] wdata,
+    
     output logic [SRAM_DATA-1:0] rdata
 );
     logic [SRAM_DATA-1:0] sram_set [15:0]; // 16 sets for sram bank

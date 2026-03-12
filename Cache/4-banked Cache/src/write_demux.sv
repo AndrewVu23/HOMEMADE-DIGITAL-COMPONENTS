@@ -6,6 +6,7 @@ module write_demux #(parameter SRAM_DATA = 32, parameter MASK = 4)
     input  logic [MASK-1:0] wmask,
     input  logic [SRAM_DATA-1:0] wdata,
     input  logic [4*SRAM_DATA-1:0] mem_rdata,
+    
     output logic [SRAM_DATA-1:0] bank_0, bank_1, bank_2, bank_3,
     output logic [MASK-1:0] bank0_wmask, bank1_wmask, bank2_wmask, bank3_wmask,
     output logic bank0_we, bank1_we, bank2_we, bank3_we
