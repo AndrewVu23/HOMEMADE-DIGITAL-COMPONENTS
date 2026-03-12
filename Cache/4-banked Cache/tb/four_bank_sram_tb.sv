@@ -13,7 +13,6 @@ module four_bank_sram_tb;
 
     four_bank_sram #(SRAM_DATA, MASK) dut (.*);
 
-    // 100MHz clock
     always #5 clk = ~clk;
 
     initial begin
