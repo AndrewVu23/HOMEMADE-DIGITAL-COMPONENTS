@@ -12,6 +12,7 @@ module four_bank_sram #(parameter SRAM_DATA = 32, parameter MASK = 4)
     
     always_ff @(posedge clk) begin
         if (we) begin
+            
             // bit assign for wmask logic (wmask chooses which part of a word to write)
             if (wmask[0]) sram_set[index][7:0]   <= wdata[7:0];
             if (wmask[1]) sram_set[index][15:8]  <= wdata[15:8];
