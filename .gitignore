@@ -7,4 +7,5 @@ results.xml
 
 # IDE and OS files
 .vscode/
+.claude/
 **/.DS_Store

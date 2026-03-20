@@ -1,0 +1,38 @@
+# Component-level testbenches (Icarus Verilog)
+# Usage:
+#   make -f Makefile.component baud    # run baud_rate_gen testbench
+#   make -f Makefile.component tx      # run TX testbench
+#   make -f Makefile.component rx      # run RX testbench
+#   make -f Makefile.component all     # run all
+
+SRC_DIR  = ../src
+SIM_BUILD = build
+
+IVERILOG = iverilog
+VVP      = vvp
+FLAGS    = -g2012 -Wall
+
+.PHONY: all baud tx rx clean
+
+all: baud tx rx
+
+$(SIM_BUILD):
+	mkdir -p $(SIM_BUILD)
+
+baud: $(SIM_BUILD)
+	$(IVERILOG) $(FLAGS) -o $(SIM_BUILD)/baud_rate_gen_tb.vvp \
+		$(SRC_DIR)/baud_rate_gen.sv baud_rate_gen_tb.sv
+	$(VVP) $(SIM_BUILD)/baud_rate_gen_tb.vvp
+
+tx: $(SIM_BUILD)
+	$(IVERILOG) $(FLAGS) -o $(SIM_BUILD)/TX_tb.vvp \
+		$(SRC_DIR)/baud_rate_gen.sv $(SRC_DIR)/TX.sv TX_tb.sv
+	$(VVP) $(SIM_BUILD)/TX_tb.vvp
+
+rx: $(SIM_BUILD)
+	$(IVERILOG) $(FLAGS) -o $(SIM_BUILD)/RX_tb.vvp \
+		$(SRC_DIR)/baud_rate_gen.sv $(SRC_DIR)/RX.sv RX_tb.sv
+	$(VVP) $(SIM_BUILD)/RX_tb.vvp
+
+clean:
+	rm -rf $(SIM_BUILD) *.vcd
