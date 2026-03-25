@@ -65,6 +65,7 @@ module cache_top #(
     // 1. tag sram (stores metadata for the 16 sets)
     tag_decoder #(TAG_DECODER) tag_sram_module (
         .clk (clk),
+        .rst (rst),
         .we (tag_we),
         .index (index),
         .wdata (tag_wdata),
